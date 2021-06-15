@@ -1,0 +1,16 @@
+[
+{
+  "modid": "collisiondamage",
+  "name": "CollisionDamage",
+  "description": "Newton's First Law has consequences.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Fonnymunkey"],
+  "credits": "",
+  "logoFile": "title.png",
+  "screenshots": [],
+  "dependencies": []
+}
+]
