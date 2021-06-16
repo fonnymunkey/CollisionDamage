@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-@Mod(modid = CollisionDamage.MODID, version = CollisionDamage.VERSION, name = CollisionDamage.NAME)
+@Mod(modid = CollisionDamage.MODID, version = CollisionDamage.VERSION, name = CollisionDamage.NAME, acceptableRemoteVersions = "*")
 public class CollisionDamage
 {
     public static final String MODID = "collisiondamage";
-    public static final String VERSION = "1.1.1";
+    public static final String VERSION = "1.1.2";
     public static final String NAME = "CollisionDamage";
     public static final String PROXY = "collisiondamage.core.proxies";
     public static final String CHANNEL = "COLLISIONDAMAGE";
