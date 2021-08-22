@@ -6,9 +6,11 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.IThreadListener;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class PacketCollisionS implements IMessage {
 
@@ -39,16 +41,23 @@ public class PacketCollisionS implements IMessage {
 	public static class CollisionMessageHandler implements IMessageHandler<PacketCollisionS, IMessage> {
 		@Override
 		public IMessage onMessage(PacketCollisionS message, MessageContext ctx) {
-			final EntityPlayer player = CollisionDamage.proxy.getPlayer(ctx);
-			if(player==null) return null;
-			
-			final double accel = message.getAccel();
-			
-			if(accel > ModConfig.server.accelerationThreshold) {
-				float damageValue = (((float)Math.round((accel - ModConfig.server.accelerationThreshold)*4*ModConfig.server.damageMultiplier))/4);//Should round to nearest 0.25 after multiplier
+			if(ctx.side==Side.SERVER) {
+				final EntityPlayer player = CollisionDamage.proxy.getPlayer(ctx);
+				if(player==null) return null;
 				
-				player.playSound(damageValue > 4 ? SoundEvents.ENTITY_GENERIC_BIG_FALL : SoundEvents.ENTITY_GENERIC_SMALL_FALL, 1.0F, 1.0F);
-				player.attackEntityFrom(ModConfig.server.damageTypeWall ? DamageSource.FLY_INTO_WALL : DamageSource.FALL, damageValue);
+				final double accel = message.getAccel();
+				
+				IThreadListener thread = CollisionDamage.proxy.getListener(ctx);
+				
+				thread.addScheduledTask(() -> // Game Thread
+	            {
+					if(accel > ModConfig.server.accelerationThreshold) {
+						float damageValue = (((float)Math.round((accel - ModConfig.server.accelerationThreshold)*4*ModConfig.server.damageMultiplier))/4);//Should round to nearest 0.25 after multiplier
+						
+						player.playSound(damageValue > 4 ? SoundEvents.ENTITY_GENERIC_BIG_FALL : SoundEvents.ENTITY_GENERIC_SMALL_FALL, 1.0F, 1.0F);
+						player.attackEntityFrom(ModConfig.server.damageTypeWall ? DamageSource.FLY_INTO_WALL : DamageSource.FALL, damageValue);
+					}
+	            });
 			}
 			return null;
 		}
