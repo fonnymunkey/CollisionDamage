@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.event.*;
 public class CollisionDamage
 {
     public static final String MODID = "collisiondamage";
-    public static final String VERSION = "1.2.1";
+    public static final String VERSION = "1.2.2";
     public static final String NAME = "CollisionDamage";
     public static final String PROXY = "collisiondamage.core.proxies";
     public static final String CHANNEL = "COLLISIONDAMAGE";
